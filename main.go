@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/julienschmidt/httprouter"
+	"github.com/sirupsen/logrus"
 
-	"./config"
-	"./handlers"
-	"./middlewares"
+	"github.com/ashwinspg/explore-golang/config"
+	"github.com/ashwinspg/explore-golang/handlers"
+	"github.com/ashwinspg/explore-golang/middlewares"
 )
 
 func main() {
