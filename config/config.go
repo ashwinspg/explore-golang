@@ -2,8 +2,6 @@ package config
 
 import (
 	"os"
-
-	"github.com/joho/godotenv"
 )
 
 var (
@@ -11,7 +9,5 @@ var (
 )
 
 func init() {
-	godotenv.Load(".env")
-
 	PORT = os.Getenv("PORT")
 }
