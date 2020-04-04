@@ -3,10 +3,9 @@ package handlers
 import (
 	"fmt"
 	"net/http"
-
-	"github.com/julienschmidt/httprouter"
 )
 
-func PingHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+//PingHandler - to ping the server
+func PingHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Server is Running...")
 }
