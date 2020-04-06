@@ -1,7 +1,6 @@
 package db
 
 import (
-	"os"
 	"strings"
 
 	"github.com/ashwinspg/explore-golang/config"
@@ -27,11 +26,9 @@ func MigrateUp() {
 	m, err := migrate.New(filePathWithScheme(config.MIGRATION_FILES_PATH), config.DATABASE_URL)
 	if err != nil {
 		l.WithError(err).Fatal("Failed to initialise migration")
-		os.Exit(1)
 	}
 	err = m.Up()
 	if err != nil && err != migrate.ErrNoChange && err != migrate.ErrLocked {
 		l.WithError(err).Fatal("Failed to migrate")
-		os.Exit(1)
 	}
 }
