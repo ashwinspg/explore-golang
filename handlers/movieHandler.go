@@ -18,16 +18,28 @@ import (
 
 //GetMovieHandler - get movie details
 func GetMovieHandler(w http.ResponseWriter, r *http.Request) {
+	l := utils.LogEntryWithRef()
+
 	uuid := chi.URLParam(r, "id")
 
-	dbObj, _ := db.GetPostgresDB()
+	dbObj, err := db.GetPostgresDB()
+	if err != nil {
+		l.WithError(err).Fatal("Failed to get DB connection")
+	}
 
 	movieInfoDAO := daos.NewMovieInfo(dbObj)
-	movieInfoDTO, _ := getMovie(uuid, movieInfoDAO)
+	movieInfoDTO, err := getMovie(uuid, movieInfoDAO)
 
-	// movieInfoDTO, _ := getMovieFromMovieBuff(uuid)
+	if err != nil {
+		l.WithError(err).Error("Failed to get movie information")
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Failed to get movie information"))
+		return
+	}
 
+	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
+
 	json.NewEncoder(w).Encode(movieInfoDTO.Info)
 }
 
@@ -36,20 +48,23 @@ func getMovie(uuid string, movieInfoDAO *daos.MovieInfo) (dtos.MovieInfo, error)
 	if err != nil {
 		switch err {
 		case sql.ErrNoRows:
-			movieInfoDTO, _ = getMovieFromMovieBuff(uuid)
+			movieInfoDTO, err = getMovieFromMovieBuff(uuid)
+			if err != nil {
+				return dtos.MovieInfo{}, err
+			}
+
 			movieInfoDAO.Save(movieInfoDTO)
 		default:
 			return dtos.MovieInfo{}, err
 		}
 	} else {
-		logrus.Info("Fetching Movie Information from local DB")
+		logrus.Info("Fetched Movie Information from local DB")
 	}
 
 	return movieInfoDTO, nil
 }
 
 func getMovieFromMovieBuff(uuid string) (dtos.MovieInfo, error) {
-	logrus.Info("Fetching Movie Information from MovieBuff SDK")
 	moviebuffObj := moviebuff.New(moviebuff.Config{
 		HostURL:     config.MOVIEBUFF_URL,
 		StaticToken: config.MOVIEBUFF_TOKEN,
@@ -63,9 +78,13 @@ func getMovieFromMovieBuff(uuid string) (dtos.MovieInfo, error) {
 
 	var movieInfoDTO dtos.MovieInfo
 	movieInfoDTO.Movie_UUID = movieDetail.UUID
-	movieInfoDTO.Info = make(utils.PropertyMap)
-	j, _ := json.Marshal(movieDetail)
-	json.Unmarshal(j, &movieInfoDTO.Info)
+	movieInfoDTO.Info, err = utils.TransformToPropertyMap(movieDetail)
+
+	if err != nil {
+		return dtos.MovieInfo{}, err
+	}
+
+	logrus.Info("Fetched Movie Information from MovieBuff SDK")
 
 	return movieInfoDTO, nil
 }

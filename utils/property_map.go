@@ -34,3 +34,16 @@ func (p *PropertyMap) Scan(src interface{}) error {
 
 	return nil
 }
+
+//TransformToPropertyMap - Value v transforms to PropertyMap in des
+func TransformToPropertyMap(v interface{}) (PropertyMap, error) {
+	des := make(PropertyMap)
+	j, err := json.Marshal(v)
+
+	if err != nil {
+		return des, err
+	}
+
+	err = json.Unmarshal(j, &des)
+	return des, err
+}
