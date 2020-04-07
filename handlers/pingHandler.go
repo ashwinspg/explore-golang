@@ -7,5 +7,5 @@ import (
 
 //PingHandler - to ping the server
 func PingHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Server is Running...")
+	fmt.Fprintf(w, "Server is Running...")
 }
