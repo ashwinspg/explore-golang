@@ -6,21 +6,21 @@ import (
 	"github.com/ashwinspg/explore-golang/dtos"
 )
 
-//MovieInfo - DAO
-type MovieInfo struct {
+//Movie - DAO
+type Movie struct {
 	db *sql.DB
 }
 
-//NewMovieInfo - instance creation
-func NewMovieInfo(db *sql.DB) *MovieInfo {
-	return &MovieInfo{db}
+//NewMovie - instance creation
+func NewMovie(db *sql.DB) *Movie {
+	return &Movie{db}
 }
 
-//Save - add new MovieInfo data
-func (movieInfoDAO *MovieInfo) Save(movieInfoDTO dtos.Movie) error {
+//Save - add new Movie data
+func (movieDAO *Movie) Save(movieDTO dtos.Movie) error {
 	query := `INSERT INTO "` + dtos.MovieTable + `"("uuid", "info") VALUES($1, $2)`
 
-	statement, err := movieInfoDAO.db.Prepare(query)
+	statement, err := movieDAO.db.Prepare(query)
 
 	if err != nil {
 		return err
@@ -28,7 +28,7 @@ func (movieInfoDAO *MovieInfo) Save(movieInfoDTO dtos.Movie) error {
 
 	defer statement.Close()
 
-	_, err = statement.Exec(movieInfoDTO.UUID, movieInfoDTO.Info)
+	_, err = statement.Exec(movieDTO.UUID, movieDTO.Info)
 
 	if err != nil {
 		return err
@@ -37,13 +37,13 @@ func (movieInfoDAO *MovieInfo) Save(movieInfoDTO dtos.Movie) error {
 	return nil
 }
 
-//FindByID - find movie_info through id
-func (movieInfoDAO *MovieInfo) FindByID(uuid string) (dtos.Movie, error) {
+//FindByID - find movie through uuid
+func (movieDAO *Movie) FindByID(uuid string) (dtos.Movie, error) {
 	query := `SELECT * FROM ` + dtos.MovieTable + ` WHERE "uuid" = $1`
 
-	var movieInfoDTO dtos.Movie
+	var movieDTO dtos.Movie
 
-	statement, err := movieInfoDAO.db.Prepare(query)
+	statement, err := movieDAO.db.Prepare(query)
 
 	if err != nil {
 		return dtos.Movie{}, err
@@ -51,11 +51,11 @@ func (movieInfoDAO *MovieInfo) FindByID(uuid string) (dtos.Movie, error) {
 
 	defer statement.Close()
 
-	err = statement.QueryRow(uuid).Scan(&movieInfoDTO.UUID, &movieInfoDTO.Info)
+	err = statement.QueryRow(uuid).Scan(&movieDTO.UUID, &movieDTO.Info)
 
 	if err != nil {
 		return dtos.Movie{}, err
 	}
 
-	return movieInfoDTO, nil
+	return movieDTO, nil
 }

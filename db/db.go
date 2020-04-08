@@ -5,11 +5,17 @@ import (
 	"fmt"
 
 	"github.com/ashwinspg/explore-golang/config"
+	"github.com/ashwinspg/explore-golang/utils"
 	_ "github.com/lib/pq"
 )
 
-//GetPostgresDB - getting postgres connection
-func GetPostgresDB() (*sql.DB, error) {
+var db *sql.DB
+
+func init() {
+	var dbConnErr error
+
+	l := utils.LogEntryWithRef()
+
 	host := config.POSTGRES_HOST
 	user := config.POSTGRES_USER
 	password := config.POSTGRES_PASSWORD
@@ -17,24 +23,17 @@ func GetPostgresDB() (*sql.DB, error) {
 
 	desc := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", host, user, password, dbname)
 
-	db, err := createConnection(desc)
+	db, dbConnErr = sql.Open("postgres", desc)
 
-	if err != nil {
-		return nil, err
+	if dbConnErr != nil {
+		l.WithError(dbConnErr).Fatal("Failed to get DB connection")
 	}
 
-	return db, nil
+	db.SetMaxIdleConns(config.MAX_DB_CONNECTIONS)
+	db.SetMaxOpenConns(config.MAX_DB_CONNECTIONS)
 }
 
-func createConnection(desc string) (*sql.DB, error) {
-	db, err := sql.Open("postgres", desc)
-
-	if err != nil {
-		return nil, err
-	}
-
-	db.SetMaxIdleConns(10)
-	db.SetMaxOpenConns(10)
-
-	return db, nil
+//GetDB - to get DB connection
+func GetDB() *sql.DB {
+	return db
 }
