@@ -3,34 +3,20 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"time"
 
-	log "github.com/Sirupsen/logrus"
-	http_router "github.com/julienschmidt/httprouter"
+	"github.com/sirupsen/logrus"
+
+	"github.com/ashwinspg/explore-golang/config"
+	"github.com/ashwinspg/explore-golang/db"
+	"github.com/ashwinspg/explore-golang/handlers"
 )
 
 func main() {
-	port := "8080"
-	router := http_router.New()
 
-	router.GET("/ping", loggerMiddleware(ping))
+	db.MigrateUp()
 
-	log.Infof("Listening on port %s", port)
-	if err := http.ListenAndServe(":8080", router); err != nil {
-		log.Panic(err)
-	}
-}
-
-func ping(w http.ResponseWriter, r *http.Request, ps http_router.Params) {
-	fmt.Fprintf(w, "Server is Running...")
-}
-
-func loggerMiddleware(next http_router.Handle) http_router.Handle {
-	return func(w http.ResponseWriter, r *http.Request, ps http_router.Params) {
-		log.Info(fmt.Sprintf("-REQ INFO- %s %s", r.URL.String(), r.Method))
-		begin := time.Now().UnixNano()
-		next(w, r, ps)
-		end := time.Now().UnixNano()
-		log.Info(fmt.Sprintf("-RES INFO- PROCESSED IN %dns", (end - begin)))
+	logrus.Infof("Listening on port %s", config.PORT)
+	if err := http.ListenAndServe(fmt.Sprintf(":%s", config.PORT), handlers.GetRouter()); err != nil {
+		logrus.Panic(err)
 	}
 }

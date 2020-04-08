@@ -1,0 +1,30 @@
+# github.com/RealImage/moviebuff-sdk-go v0.0.0-20191119090222-8f6f2b1786cc
+## explicit
+github.com/RealImage/moviebuff-sdk-go
+# github.com/RealImage/moviebuff-sdk-go/v2 v2.0.0
+github.com/RealImage/moviebuff-sdk-go/v2
+# github.com/go-chi/chi v4.1.0+incompatible
+## explicit
+github.com/go-chi/chi
+github.com/go-chi/chi/middleware
+# github.com/golang-migrate/migrate v3.5.4+incompatible
+## explicit
+github.com/golang-migrate/migrate
+github.com/golang-migrate/migrate/database
+github.com/golang-migrate/migrate/database/postgres
+github.com/golang-migrate/migrate/source
+github.com/golang-migrate/migrate/source/file
+# github.com/konsorten/go-windows-terminal-sequences v1.0.1
+github.com/konsorten/go-windows-terminal-sequences
+# github.com/lib/pq v1.3.0
+## explicit
+github.com/lib/pq
+github.com/lib/pq/oid
+github.com/lib/pq/scram
+# github.com/sirupsen/logrus v1.5.0
+## explicit
+github.com/sirupsen/logrus
+# golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
+## explicit
+# golang.org/x/sys v0.0.0-20200323222414-85ca7c5b95cd
+golang.org/x/sys/unix
