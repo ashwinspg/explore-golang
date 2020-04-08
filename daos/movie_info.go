@@ -17,8 +17,8 @@ func NewMovieInfo(db *sql.DB) *MovieInfo {
 }
 
 //Save - add new MovieInfo data
-func (movieInfoDAO *MovieInfo) Save(movieInfoDTO dtos.MovieInfo) error {
-	query := `INSERT INTO "` + dtos.MovieInfoTable + `"("movie_uuid", "info") VALUES($1, $2)`
+func (movieInfoDAO *MovieInfo) Save(movieInfoDTO dtos.Movie) error {
+	query := `INSERT INTO "` + dtos.MovieTable + `"("uuid", "info") VALUES($1, $2)`
 
 	statement, err := movieInfoDAO.db.Prepare(query)
 
@@ -28,7 +28,7 @@ func (movieInfoDAO *MovieInfo) Save(movieInfoDTO dtos.MovieInfo) error {
 
 	defer statement.Close()
 
-	_, err = statement.Exec(movieInfoDTO.Movie_UUID, movieInfoDTO.Info)
+	_, err = statement.Exec(movieInfoDTO.UUID, movieInfoDTO.Info)
 
 	if err != nil {
 		return err
@@ -38,23 +38,23 @@ func (movieInfoDAO *MovieInfo) Save(movieInfoDTO dtos.MovieInfo) error {
 }
 
 //FindByID - find movie_info through id
-func (movieInfoDAO *MovieInfo) FindByID(uuid string) (dtos.MovieInfo, error) {
-	query := `SELECT * FROM ` + dtos.MovieInfoTable + ` WHERE "movie_uuid" = $1`
+func (movieInfoDAO *MovieInfo) FindByID(uuid string) (dtos.Movie, error) {
+	query := `SELECT * FROM ` + dtos.MovieTable + ` WHERE "uuid" = $1`
 
-	var movieInfoDTO dtos.MovieInfo
+	var movieInfoDTO dtos.Movie
 
 	statement, err := movieInfoDAO.db.Prepare(query)
 
 	if err != nil {
-		return dtos.MovieInfo{}, err
+		return dtos.Movie{}, err
 	}
 
 	defer statement.Close()
 
-	err = statement.QueryRow(uuid).Scan(&movieInfoDTO.Movie_UUID, &movieInfoDTO.Info)
+	err = statement.QueryRow(uuid).Scan(&movieInfoDTO.UUID, &movieInfoDTO.Info)
 
 	if err != nil {
-		return dtos.MovieInfo{}, err
+		return dtos.Movie{}, err
 	}
 
 	return movieInfoDTO, nil

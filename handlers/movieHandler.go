@@ -43,19 +43,19 @@ func GetMovieHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(movieInfoDTO.Info)
 }
 
-func getMovie(uuid string, movieInfoDAO *daos.MovieInfo) (dtos.MovieInfo, error) {
+func getMovie(uuid string, movieInfoDAO *daos.MovieInfo) (dtos.Movie, error) {
 	movieInfoDTO, err := movieInfoDAO.FindByID(uuid)
 	if err != nil {
 		switch err {
 		case sql.ErrNoRows:
 			movieInfoDTO, err = getMovieFromMovieBuff(uuid)
 			if err != nil {
-				return dtos.MovieInfo{}, err
+				return dtos.Movie{}, err
 			}
 
 			movieInfoDAO.Save(movieInfoDTO)
 		default:
-			return dtos.MovieInfo{}, err
+			return dtos.Movie{}, err
 		}
 	} else {
 		logrus.Info("Fetched Movie Information from local DB")
@@ -64,7 +64,7 @@ func getMovie(uuid string, movieInfoDAO *daos.MovieInfo) (dtos.MovieInfo, error)
 	return movieInfoDTO, nil
 }
 
-func getMovieFromMovieBuff(uuid string) (dtos.MovieInfo, error) {
+func getMovieFromMovieBuff(uuid string) (dtos.Movie, error) {
 	moviebuffObj := moviebuff.New(moviebuff.Config{
 		HostURL:     config.MOVIEBUFF_URL,
 		StaticToken: config.MOVIEBUFF_TOKEN,
@@ -73,15 +73,15 @@ func getMovieFromMovieBuff(uuid string) (dtos.MovieInfo, error) {
 	movieDetail, err := moviebuffObj.GetMovie(uuid)
 
 	if err != nil {
-		return dtos.MovieInfo{}, err
+		return dtos.Movie{}, err
 	}
 
-	var movieInfoDTO dtos.MovieInfo
-	movieInfoDTO.Movie_UUID = movieDetail.UUID
+	var movieInfoDTO dtos.Movie
+	movieInfoDTO.UUID = movieDetail.UUID
 	movieInfoDTO.Info, err = utils.TransformToPropertyMap(movieDetail)
 
 	if err != nil {
-		return dtos.MovieInfo{}, err
+		return dtos.Movie{}, err
 	}
 
 	logrus.Info("Fetched Movie Information from MovieBuff SDK")
