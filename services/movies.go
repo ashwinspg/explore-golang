@@ -7,7 +7,6 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/ashwinspg/explore-golang/config"
-	"github.com/ashwinspg/explore-golang/constants"
 	"github.com/ashwinspg/explore-golang/daos"
 	"github.com/ashwinspg/explore-golang/dtos"
 	"github.com/ashwinspg/explore-golang/utils"
@@ -33,7 +32,7 @@ func (m *Movie) GetMovie(uuid string) (movieDTO dtos.Movie, err error) {
 	switch err {
 	case nil:
 		return
-	case constants.ErrMovieNotFoundInDB:
+	case daos.ErrMovieNotFound:
 		movieDTO, err = m.getMovieFromMovieBuff(uuid)
 		if err != nil {
 			m.l.WithError(err).Errorln("Failed to get Movie Information from MovieBuff")
@@ -42,12 +41,12 @@ func (m *Movie) GetMovie(uuid string) (movieDTO dtos.Movie, err error) {
 
 		err = m.dao.Save(movieDTO)
 		if err != nil {
-			m.l.WithError(err).Errorln("Failed to save Movie Information from MovieBuff in Database")
+			m.l.WithError(err).Errorln("Failed to save Movie Information from MovieBuff")
 		}
 		return
 	default:
 		m.l.WithError(err).Errorln("Failed to get Movie Information from Database")
-		return dtos.Movie{}, err
+		return
 	}
 }
 
@@ -58,14 +57,11 @@ func (m *Movie) getMovieFromMovieBuff(uuid string) (movieDTO dtos.Movie, err err
 	})
 	movieDetail, err := moviebuffObj.GetMovie(uuid)
 	if err != nil {
-		return dtos.Movie{}, err
+		return
 	}
 
 	movieDTO.UUID = movieDetail.UUID
 	movieDTO.Info, err = utils.TransformToPropertyMap(movieDetail)
-	if err != nil {
-		return dtos.Movie{}, err
-	}
 
 	return
 }

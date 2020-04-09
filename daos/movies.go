@@ -4,12 +4,11 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/ashwinspg/explore-golang/constants"
 	"github.com/ashwinspg/explore-golang/dtos"
 )
 
 var (
-	ErrMovieNotFoundInDB = errors.New("Movie Information for given UUID is not found in Database")
+	ErrMovieNotFound = errors.New("Movie Information for given UUID is not found")
 )
 
 //Movie - DAO
@@ -48,7 +47,8 @@ func (movieDAO *Movie) FindByID(uuid string) (movieDTO dtos.Movie, err error) {
 
 	err = statement.QueryRow().Scan(&movieDTO.UUID, &movieDTO.Info)
 	if err == sql.ErrNoRows {
-		return dtos.Movie{}, constants.ErrMovieNotFoundInDB
+		err = ErrMovieNotFound
 	}
+
 	return
 }
