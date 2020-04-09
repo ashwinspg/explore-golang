@@ -7,6 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/ashwinspg/explore-golang/config"
+	"github.com/ashwinspg/explore-golang/constants"
 	"github.com/ashwinspg/explore-golang/daos"
 	"github.com/ashwinspg/explore-golang/dtos"
 	"github.com/ashwinspg/explore-golang/utils"
@@ -15,59 +16,56 @@ import (
 //Movie - service
 type Movie struct {
 	dao *daos.Movie
+	l   *logrus.Entry
 }
 
 //NewMovie - instance creation
-func NewMovie(db *sql.DB) *Movie {
+func NewMovie(db *sql.DB, l *logrus.Entry) *Movie {
 	return &Movie{
 		dao: daos.NewMovie(db),
+		l:   l,
 	}
 }
 
 //GetMovie - get movie based on uuid
-func (m *Movie) GetMovie(uuid string) (dtos.Movie, error) {
-	movieDTO, err := m.dao.FindByID(uuid)
-	if err != nil {
-		switch err {
-		case sql.ErrNoRows:
-			movieDTO, err = m.getMovieFromMovieBuff(uuid)
-			if err != nil {
-				return dtos.Movie{}, err
-			}
-
-			m.dao.Save(movieDTO)
-		default:
-			return dtos.Movie{}, err
+func (m *Movie) GetMovie(uuid string) (movieDTO dtos.Movie, err error) {
+	movieDTO, err = m.dao.FindByID(uuid)
+	switch err {
+	case nil:
+		return
+	case constants.ErrMovieNotFoundInDB:
+		movieDTO, err = m.getMovieFromMovieBuff(uuid)
+		if err != nil {
+			m.l.WithError(err).Errorln("Failed to get Movie Information from MovieBuff")
+			return
 		}
-	} else {
-		logrus.Info("Fetched Movie Information from local DB")
-	}
 
-	return movieDTO, err
+		err = m.dao.Save(movieDTO)
+		if err != nil {
+			m.l.WithError(err).Errorln("Failed to save Movie Information from MovieBuff in Database")
+		}
+		return
+	default:
+		m.l.WithError(err).Errorln("Failed to get Movie Information from Database")
+		return dtos.Movie{}, err
+	}
 }
 
-func (m *Movie) getMovieFromMovieBuff(uuid string) (dtos.Movie, error) {
-	var movieDTO dtos.Movie
-
+func (m *Movie) getMovieFromMovieBuff(uuid string) (movieDTO dtos.Movie, err error) {
 	moviebuffObj := moviebuff.New(moviebuff.Config{
 		HostURL:     config.MOVIEBUFF_URL,
 		StaticToken: config.MOVIEBUFF_TOKEN,
 	})
-
 	movieDetail, err := moviebuffObj.GetMovie(uuid)
-
 	if err != nil {
 		return dtos.Movie{}, err
 	}
 
 	movieDTO.UUID = movieDetail.UUID
 	movieDTO.Info, err = utils.TransformToPropertyMap(movieDetail)
-
 	if err != nil {
 		return dtos.Movie{}, err
 	}
 
-	logrus.Info("Fetched Movie Information from MovieBuff SDK")
-
-	return movieDTO, err
+	return
 }
