@@ -9,7 +9,6 @@ import (
 	"github.com/ashwinspg/explore-golang/config"
 	"github.com/ashwinspg/explore-golang/daos"
 	"github.com/ashwinspg/explore-golang/dtos"
-	"github.com/ashwinspg/explore-golang/utils"
 )
 
 //Movie - service
@@ -61,7 +60,7 @@ func (m *Movie) getMovieFromMovieBuff(uuid string) (movieDTO dtos.Movie, err err
 	}
 
 	movieDTO.UUID = movieDetail.UUID
-	movieDTO.Info, err = utils.TransformToPropertyMap(movieDetail)
+	movieDTO.Info, err = dtos.TransformToMovieInfo(movieDetail)
 
 	return
 }
