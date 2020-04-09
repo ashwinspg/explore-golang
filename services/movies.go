@@ -2,6 +2,7 @@ package services
 
 import (
 	"database/sql"
+
 	"github.com/RealImage/moviebuff-sdk-go"
 	"github.com/sirupsen/logrus"
 
@@ -23,6 +24,7 @@ func NewMovie(db *sql.DB) *Movie {
 	}
 }
 
+//GetMovie - get movie based on uuid
 func (m *Movie) GetMovie(uuid string) (dtos.Movie, error) {
 	movieDTO, err := m.dao.FindByID(uuid)
 	if err != nil {
@@ -41,10 +43,12 @@ func (m *Movie) GetMovie(uuid string) (dtos.Movie, error) {
 		logrus.Info("Fetched Movie Information from local DB")
 	}
 
-	return movieDTO, nil
+	return movieDTO, err
 }
 
 func (m *Movie) getMovieFromMovieBuff(uuid string) (dtos.Movie, error) {
+	var movieDTO dtos.Movie
+
 	moviebuffObj := moviebuff.New(moviebuff.Config{
 		HostURL:     config.MOVIEBUFF_URL,
 		StaticToken: config.MOVIEBUFF_TOKEN,
@@ -56,7 +60,6 @@ func (m *Movie) getMovieFromMovieBuff(uuid string) (dtos.Movie, error) {
 		return dtos.Movie{}, err
 	}
 
-	var movieDTO dtos.Movie
 	movieDTO.UUID = movieDetail.UUID
 	movieDTO.Info, err = utils.TransformToPropertyMap(movieDetail)
 
@@ -66,5 +69,5 @@ func (m *Movie) getMovieFromMovieBuff(uuid string) (dtos.Movie, error) {
 
 	logrus.Info("Fetched Movie Information from MovieBuff SDK")
 
-	return movieDTO, nil
+	return movieDTO, err
 }
