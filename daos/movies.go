@@ -37,7 +37,7 @@ func (movieDAO *Movie) Save(movieDTO dtos.Movie) error {
 
 //FindByID - find movie through uuid
 func (movieDAO *Movie) FindByID(uuid string) (movieDTO dtos.Movie, err error) {
-	query := `SELECT * FROM ` + dtos.MovieTable + ` WHERE "uuid" = '` + uuid + `';`
+	query := `SELECT * FROM ` + dtos.MovieTable + ` WHERE "uuid" = $1`
 	statement, err := movieDAO.db.Prepare(query)
 	if err != nil {
 		return dtos.Movie{}, err
@@ -45,7 +45,7 @@ func (movieDAO *Movie) FindByID(uuid string) (movieDTO dtos.Movie, err error) {
 
 	defer statement.Close()
 
-	err = statement.QueryRow().Scan(&movieDTO.UUID, &movieDTO.Info)
+	err = statement.QueryRow(uuid).Scan(&movieDTO.UUID, &movieDTO.Info)
 	if err == sql.ErrNoRows {
 		err = ErrMovieNotFound
 	}
