@@ -31,6 +31,10 @@ func (t *MovieTestSuite) TestSave() {
 	result, err := t.dao.FindByID(movieDTO.UUID)
 	t.NotNil(result)
 	t.NoError(err, "Error finding movie by given UUID")
+
+	result, err = t.dao.FindByID("976a6bc7-c5e6-4544-bcad-127db7de2111")
+	t.Empty(result)
+	t.Error(err)
 }
 
 func TestMovieSuite(t *testing.T) {
