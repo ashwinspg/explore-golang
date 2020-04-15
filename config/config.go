@@ -12,12 +12,12 @@ var (
 	MOVIEBUFF_URL        string
 	MIGRATION_FILES_PATH string
 
-	POSTGRES_HOST      string
-	POSTGRES_PORT      string
-	POSTGRES_USER      string
-	POSTGRES_PASSWORD  string
-	POSTGRES_DB_NAME   string
-	DATABASE_URL       string
+	DB_HOST            string
+	DB_PORT            string
+	DB_USER            string
+	DB_PASSWORD        string
+	DB_NAME            string
+	DB_URL             string
 	MAX_DB_CONNECTIONS int
 )
 
@@ -27,11 +27,11 @@ func init() {
 	MOVIEBUFF_URL = os.Getenv("MOVIEBUFF_URL")
 	MIGRATION_FILES_PATH = os.Getenv("MIGRATION_FILES_PATH")
 
-	POSTGRES_HOST = os.Getenv("POSTGRES_HOST")
-	POSTGRES_PORT = os.Getenv("POSTGRES_PORT")
-	POSTGRES_USER = os.Getenv("POSTGRES_USER")
-	POSTGRES_PASSWORD = os.Getenv("POSTGRES_PASSWORD")
-	POSTGRES_DB_NAME = os.Getenv("POSTGRES_DB_NAME")
-	DATABASE_URL = fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB_NAME)
+	DB_HOST = os.Getenv("DB_HOST")
+	DB_PORT = os.Getenv("DB_PORT")
+	DB_USER = os.Getenv("DB_USER")
+	DB_PASSWORD = os.Getenv("DB_PASSWORD")
+	DB_NAME = os.Getenv("DB_NAME")
+	DB_URL = fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
 	MAX_DB_CONNECTIONS, _ = strconv.Atoi(os.Getenv("MAX_DB_CONNECTIONS"))
 }
