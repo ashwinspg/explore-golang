@@ -11,6 +11,10 @@ import (
 	"github.com/go-chi/chi"
 )
 
+func setMovieRoutes(router chi.Router) {
+	router.Get("/movies/{id}", GetMovieHandler)
+}
+
 //GetMovieHandler - get movie details
 func GetMovieHandler(w http.ResponseWriter, r *http.Request) {
 	l := utils.LogEntryWithRef()
