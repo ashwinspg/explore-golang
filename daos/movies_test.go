@@ -3,10 +3,10 @@ package daos
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/ashwinspg/explore-golang/dtos"
 	"github.com/ashwinspg/explore-golang/test"
+
+	"github.com/stretchr/testify/suite"
 )
 
 type MovieTestSuite struct {

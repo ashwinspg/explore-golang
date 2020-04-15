@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"sync"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/ashwinspg/explore-golang/db"
 	"github.com/ashwinspg/explore-golang/utils"
+
+	"github.com/sirupsen/logrus"
 )
 
 var once sync.Once

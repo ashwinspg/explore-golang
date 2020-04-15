@@ -3,12 +3,12 @@ package services
 import (
 	"database/sql"
 
-	"github.com/RealImage/moviebuff-sdk-go"
-	"github.com/sirupsen/logrus"
-
 	"github.com/ashwinspg/explore-golang/config"
 	"github.com/ashwinspg/explore-golang/daos"
 	"github.com/ashwinspg/explore-golang/dtos"
+
+	"github.com/RealImage/moviebuff-sdk-go"
+	"github.com/sirupsen/logrus"
 )
 
 //Movie - service

@@ -4,11 +4,11 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/ashwinspg/explore-golang/config"
 	"github.com/ashwinspg/explore-golang/utils"
+
 	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
 )
 
 var db *sql.DB

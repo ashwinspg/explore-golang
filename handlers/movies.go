@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/go-chi/chi"
-
 	"github.com/ashwinspg/explore-golang/db"
 	"github.com/ashwinspg/explore-golang/services"
 	"github.com/ashwinspg/explore-golang/utils"
+
+	"github.com/go-chi/chi"
 )
 
 //GetMovieHandler - get movie details

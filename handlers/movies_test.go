@@ -6,9 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/ashwinspg/explore-golang/test"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetMovie(t *testing.T) {
