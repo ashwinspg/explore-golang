@@ -13,7 +13,7 @@ import (
 
 var db *sql.DB
 
-func init() {
+func InitiateConnection() {
 	var dbConnErr error
 	l := utils.LogEntryWithRef()
 	host := config.POSTGRES_HOST
