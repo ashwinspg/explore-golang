@@ -23,7 +23,12 @@ func (t *MovieTestSuite) SetupTest() {
 func (t *MovieTestSuite) TestSave() {
 	movieDTO := dtos.Movie{
 		UUID: "976a6bc7-c5e6-4544-bcad-127db7de2e87",
-		Info: dtos.MovieInfo{URL: "fast-and-furious-presents-hobbs-and-shaw-2019-hindi"},
+		Info: dtos.MovieInfo{
+			UUID:     "976a6bc7-c5e6-4544-bcad-127db7de2e87",
+			URL:      "fast-and-furious-presents-hobbs-and-shaw-2019-hindi",
+			Name:     "Test Movie",
+			Language: "English",
+		},
 	}
 	err := t.dao.Save(movieDTO)
 	t.NoError(err)

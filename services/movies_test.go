@@ -21,13 +21,9 @@ func (t *MovieTestSuite) SetupTest() {
 }
 
 func (t *MovieTestSuite) TestGetMovie() {
-	// movieDTO, err := t.service.GetMovie("1d3095da-3243-4a34-a7d6-2cb570446ffe")
-	// t.NotNil(movieDTO)
-	// t.NoError(err)
-
-	// movieDTO, err = t.service.GetMovie("1d3095da-3243-4a34-a7d6-2cb570446fff")
-	// t.Equal(dtos.Movie{}, movieDTO)
-	// t.Error(err)
+	movieDTO, err := t.service.GetMovie("1d3095da-3243-4a34-a7d6-2cb570446ffe")
+	t.NotEmpty(movieDTO)
+	t.NoError(err)
 }
 
 func TestMovieSuite(t *testing.T) {

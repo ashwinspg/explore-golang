@@ -3,11 +3,9 @@ package services
 import (
 	"database/sql"
 
-	"github.com/ashwinspg/explore-golang/config"
 	"github.com/ashwinspg/explore-golang/daos"
 	"github.com/ashwinspg/explore-golang/dtos"
 
-	"github.com/RealImage/moviebuff-sdk-go"
 	"github.com/sirupsen/logrus"
 )
 
@@ -50,10 +48,12 @@ func (m *Movie) GetMovie(uuid string) (movieDTO dtos.Movie, err error) {
 }
 
 func (m *Movie) getMovieFromMovieBuff(uuid string) (movieDTO dtos.Movie, err error) {
-	moviebuffObj := moviebuff.New(moviebuff.Config{
-		HostURL:     config.MOVIEBUFF_URL,
-		StaticToken: config.MOVIEBUFF_TOKEN,
-	})
+
+	moviebuffObj, err := GetMovieBuff()
+	if err != nil {
+		return
+	}
+
 	movieDetail, err := moviebuffObj.GetMovie(uuid)
 	if err != nil {
 		return
