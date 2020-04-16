@@ -26,6 +26,12 @@ func (t *MovieTestSuite) TestGetMovie() {
 	t.NoError(err)
 }
 
+func (t *MovieTestSuite) TestValidateUUID() {
+	movieDTO, err := t.service.GetMovie("1d3095da-3243-4a34-a7d6-2cb570446ffe111")
+	t.Empty(movieDTO)
+	t.Error(err)
+}
+
 func TestMovieSuite(t *testing.T) {
 	suite.Run(t, new(MovieTestSuite))
 }

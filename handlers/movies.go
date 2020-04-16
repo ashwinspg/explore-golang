@@ -25,6 +25,8 @@ func GetMovieHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(movieDTO.Info)
+	} else if err == services.ErrInvalidMovieUUID {
+		w.WriteHeader(http.StatusBadRequest)
 	} else {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Failed while processing movie information"))

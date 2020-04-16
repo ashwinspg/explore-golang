@@ -13,7 +13,7 @@ import (
 
 var db *sql.DB
 
-func InitiateConnection() {
+func init() {
 	var dbConnErr error
 	l := utils.LogEntryWithRef()
 	host := config.DB_HOST

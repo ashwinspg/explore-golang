@@ -2,11 +2,17 @@ package services
 
 import (
 	"database/sql"
+	"errors"
 
 	"github.com/ashwinspg/explore-golang/daos"
 	"github.com/ashwinspg/explore-golang/dtos"
+	"github.com/ashwinspg/explore-golang/utils"
 
 	"github.com/sirupsen/logrus"
+)
+
+var (
+	ErrInvalidMovieUUID = errors.New("Invalid value for Movie UUID")
 )
 
 //Movie - service
@@ -25,6 +31,11 @@ func NewMovie(db *sql.DB, l *logrus.Entry) *Movie {
 
 //GetMovie - get movie based on uuid
 func (m *Movie) GetMovie(uuid string) (movieDTO dtos.Movie, err error) {
+	if !utils.IsValidUUID(uuid) {
+		err = ErrInvalidMovieUUID
+		return
+	}
+
 	movieDTO, err = m.dao.FindByID(uuid)
 	if err == nil {
 		return
@@ -48,7 +59,6 @@ func (m *Movie) GetMovie(uuid string) (movieDTO dtos.Movie, err error) {
 }
 
 func (m *Movie) getMovieFromMovieBuff(uuid string) (movieDTO dtos.Movie, err error) {
-
 	moviebuffObj, err := GetMovieBuff()
 	if err != nil {
 		return

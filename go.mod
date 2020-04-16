@@ -7,6 +7,7 @@ require (
 	github.com/go-chi/chi v4.1.0+incompatible
 	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/lib/pq v1.3.0
+	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.5.0
 	github.com/stretchr/testify v1.5.1
 	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e // indirect
