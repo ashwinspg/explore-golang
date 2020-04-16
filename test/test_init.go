@@ -22,7 +22,6 @@ type Env struct {
 func SetupTestEnv() Env {
 	once.Do(func() {
 		db.MigrateUp()
-		db.InitiateConnection()
 	})
 
 	return Env{

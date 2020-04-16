@@ -19,6 +19,8 @@ var (
 	DB_NAME            string
 	DB_URL             string
 	MAX_DB_CONNECTIONS int
+
+	ENV string
 )
 
 func init() {
@@ -34,4 +36,6 @@ func init() {
 	DB_NAME = os.Getenv("DB_NAME")
 	DB_URL = fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
 	MAX_DB_CONNECTIONS, _ = strconv.Atoi(os.Getenv("MAX_DB_CONNECTIONS"))
+
+	ENV = os.Getenv("ENV")
 }

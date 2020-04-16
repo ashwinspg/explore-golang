@@ -7,11 +7,12 @@ import (
 
 //GetRouter - router configuration
 func GetRouter() *chi.Mux {
-	router := chi.NewRouter()
-	router.Use(middleware.Logger)
+	mux := chi.NewRouter()
 
-	router.Get("/ping", PingHandler)
-	router.Get("/movies/{id}", GetMovieHandler)
+	mux.Use(middleware.Logger)
 
-	return router
+	setPingRoutes(mux)
+	setMovieRoutes(mux)
+
+	return mux
 }

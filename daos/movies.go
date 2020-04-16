@@ -22,17 +22,17 @@ func NewMovie(db *sql.DB) *Movie {
 }
 
 //Save - add new Movie data
-func (movieDAO *Movie) Save(movieDTO dtos.Movie) error {
+func (movieDAO *Movie) Save(movieDTO dtos.Movie) (err error) {
 	query := `INSERT INTO "` + dtos.MovieTable + `"("uuid", "info") VALUES($1, $2);`
 	statement, err := movieDAO.db.Prepare(query)
 	if err != nil {
-		return err
+		return
 	}
 
 	defer statement.Close()
 
 	_, err = statement.Exec(movieDTO.UUID, movieDTO.Info)
-	return err
+	return
 }
 
 //FindByID - find movie through uuid
@@ -40,7 +40,7 @@ func (movieDAO *Movie) FindByID(uuid string) (movieDTO dtos.Movie, err error) {
 	query := `SELECT * FROM ` + dtos.MovieTable + ` WHERE "uuid" = $1`
 	statement, err := movieDAO.db.Prepare(query)
 	if err != nil {
-		return dtos.Movie{}, err
+		return
 	}
 
 	defer statement.Close()
