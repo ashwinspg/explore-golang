@@ -23,7 +23,7 @@ func filePathWithScheme(path string) string {
 func MigrateUp() {
 	l := utils.LogEntryWithRef()
 
-	m, err := migrate.New(filePathWithScheme(config.MIGRATION_FILES_PATH), config.DATABASE_URL)
+	m, err := migrate.New(filePathWithScheme(config.MIGRATION_FILES_PATH), config.DB_URL)
 	if err != nil {
 		l.WithError(err).Fatal("Failed to initialise migration")
 	}

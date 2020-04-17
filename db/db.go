@@ -4,11 +4,11 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/ashwinspg/explore-golang/config"
 	"github.com/ashwinspg/explore-golang/utils"
+
 	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
 )
 
 var db *sql.DB
@@ -16,10 +16,10 @@ var db *sql.DB
 func init() {
 	var dbConnErr error
 	l := utils.LogEntryWithRef()
-	host := config.POSTGRES_HOST
-	user := config.POSTGRES_USER
-	password := config.POSTGRES_PASSWORD
-	dbname := config.POSTGRES_DB_NAME
+	host := config.DB_HOST
+	user := config.DB_USER
+	password := config.DB_PASSWORD
+	dbname := config.DB_NAME
 	desc := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", host, user, password, dbname)
 
 	db, dbConnErr = sql.Open("postgres", desc)

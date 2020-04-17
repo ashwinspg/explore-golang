@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/ashwinspg/explore-golang/config"
 	"github.com/ashwinspg/explore-golang/db"
 	"github.com/ashwinspg/explore-golang/handlers"
+
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
